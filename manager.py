@@ -6,6 +6,9 @@ import tocken
 
 
 class Interval(object):
+    """
+    Class which recreates a interval object with its properties
+    """
     def __init__(self, time, task_id, date_start, date_end):
         self._task_id = task_id
         self.time = time[2:]
@@ -16,6 +19,9 @@ class Interval(object):
     
 
 class Task(object):
+    """
+    Class which recreates a task object with its properties
+    """
     def __init__(self, name, id):
         self.name = name
         self._id = id
@@ -68,6 +74,9 @@ class APIObject(object):
         self.tasks = task_list
 
     def get_entries(self):
+        """
+        Fill the list of self.tasks with their work intervals
+        """
         url = f'https://api.clockify.me/api/v1/workspaces/{self._workspace}/user/6152d40de5f67d3511f21180/time-entries'
         r = requests.get(url=url, headers=self.__headers)
         time_parser = lambda x : datetime.datetime.strptime(str(x)[:10], '%Y-%m-%d')
@@ -83,13 +92,10 @@ class APIObject(object):
                 for i in self.tasks:
                     if i._id == work._task_id:
                         i.add_interval(work)
-        
-        print(responce)
 
 
 
 if __name__ == '__main__':
-    task_list = []
     a = APIObject(tocken=tocken.TOCKEN,
                   workspace=tocken.WORKSPACE_ID,
                   project=tocken.PROJECT_ID)
